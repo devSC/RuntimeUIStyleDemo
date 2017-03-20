@@ -17,6 +17,7 @@
 		C85C06041E7FDFF7005785AD /* NHUIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C85C06031E7FDFF7005785AD /* NHUIStyle.m */; };
 		C85C06071E7FE025005785AD /* NHUIStyle+time.m in Sources */ = {isa = PBXBuildFile; fileRef = C85C06061E7FE025005785AD /* NHUIStyle+time.m */; };
 		C85C060A1E7FE819005785AD /* SomeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C85C06091E7FE819005785AD /* SomeClass.m */; };
+		FE1B1E8E1E80193600D466FD /* Json.m in Sources */ = {isa = PBXBuildFile; fileRef = FE1B1E8D1E80193600D466FD /* Json.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		C85C06061E7FE025005785AD /* NHUIStyle+time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NHUIStyle+time.m"; sourceTree = "<group>"; };
 		C85C06081E7FE819005785AD /* SomeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeClass.h; sourceTree = "<group>"; };
 		C85C06091E7FE819005785AD /* SomeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomeClass.m; sourceTree = "<group>"; };
+		FE1B1E8C1E80193600D466FD /* Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
+		FE1B1E8D1E80193600D466FD /* Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Json.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +103,8 @@
 				C85C06061E7FE025005785AD /* NHUIStyle+time.m */,
 				C85C06081E7FE819005785AD /* SomeClass.h */,
 				C85C06091E7FE819005785AD /* SomeClass.m */,
+				FE1B1E8C1E80193600D466FD /* Json.h */,
+				FE1B1E8D1E80193600D466FD /* Json.m */,
 				C85C05E61E7FDFDE005785AD /* Main.storyboard */,
 				C85C05E91E7FDFDE005785AD /* Assets.xcassets */,
 				C85C05EB1E7FDFDE005785AD /* LaunchScreen.storyboard */,
@@ -232,6 +237,7 @@
 			files = (
 				C85C05E51E7FDFDE005785AD /* ViewController.m in Sources */,
 				C85C05E21E7FDFDE005785AD /* AppDelegate.m in Sources */,
+				FE1B1E8E1E80193600D466FD /* Json.m in Sources */,
 				C85C06071E7FE025005785AD /* NHUIStyle+time.m in Sources */,
 				C85C05DF1E7FDFDE005785AD /* main.m in Sources */,
 				C85C060A1E7FE819005785AD /* SomeClass.m in Sources */,
@@ -434,6 +440,7 @@
 				C85C05FE1E7FDFDE005785AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C85C05FF1E7FDFDE005785AD /* Build configuration list for PBXNativeTarget "NHUIStyleDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -442,6 +449,7 @@
 				C85C06011E7FDFDE005785AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
