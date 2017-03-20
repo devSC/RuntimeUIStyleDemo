@@ -106,6 +106,9 @@ id Getter(id item, SEL sel) {
     if (![var hasSuffix:@"_fake"]) {
         var = [var stringByAppendingString:@"_fake"];
     }
+    //这里是无法获取fake的成员变量的
+//    Ivar ivar = class_getInstanceVariable([item class], [var cStringUsingEncoding:NSUTF8StringEncoding]);
+//    return object_getIvar(item, ivar);
     return objc_getAssociatedObject(item, NSSelectorFromString(var));
 }
 
@@ -115,8 +118,18 @@ void Setter(id item, SEL sel, id value) {
     NSString *head = [var substringToIndex:1];
     head = [head lowercaseString];
     var = [var stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:head];
+    
     //remove :
     var = [var stringByReplacingCharactersInRange:NSMakeRange([var length] - 1, 1) withString:@""];
+    /*
+        这里, 不能直接的给现有的类添加属性后得到成员变量. 成员变量只能在类生成之前添加
+         const char *name = [[NSString stringWithFormat:@"_%@", var] cStringUsingEncoding:NSUTF8StringEncoding];
+     
+         Ivar ivar = class_getInstanceVariable([item class], name);
+         NSLog(@"class_getInstanceVariable: \n\n class: %@, ivar: %@, value: %@", [item class], ivar, value);
+         set value
+         object_setIvar(item, ivar, value);
+     */
     objc_setAssociatedObject(item, NSSelectorFromString(var), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
