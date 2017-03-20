@@ -106,8 +106,6 @@ id Getter(id item, SEL sel) {
     if (![var hasSuffix:@"_fake"]) {
         var = [var stringByAppendingString:@"_fake"];
     }
-//    Ivar ivar = class_getInstanceVariable([item class], [var cStringUsingEncoding:NSUTF8StringEncoding]);
-//    return object_getIvar(item, ivar);
     return objc_getAssociatedObject(item, NSSelectorFromString(var));
 }
 
@@ -117,21 +115,8 @@ void Setter(id item, SEL sel, id value) {
     NSString *head = [var substringToIndex:1];
     head = [head lowercaseString];
     var = [var stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:head];
-    
     //remove :
     var = [var stringByReplacingCharactersInRange:NSMakeRange([var length] - 1, 1) withString:@""];
-//    const char *name = [[NSString stringWithFormat:@"_%@", var] cStringUsingEncoding:NSUTF8StringEncoding];
-//    unsigned int count = 0;
-//    Ivar *ivars = class_copyIvarList([item class], &count);
-//    for (int i = 0; i < count; i++) {
-//        Ivar ivar = ivars[i];
-//        NSLog(@"ivar: %s", ivar_getName(ivar));
-//    }
-//    
-//    Ivar ivar = class_getInstanceVariable([item class], name);
-//    NSLog(@"class_getInstanceVariable: \n\n class: %@, ivar: %@, value: %@", [item class], ivar, value);
-//    set value
-//    object_setIvar(item, ivar, value);
     objc_setAssociatedObject(item, NSSelectorFromString(var), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -159,15 +144,7 @@ void Setter(id item, SEL sel, id value) {
     else {
         NSAssert(NO, @"add fake property failed");
     }
-    unsigned int propertyCount = 0;
-    objc_property_t *propertys = class_copyPropertyList([self class], &propertyCount);
-    //
-    NSLog(@"----------ADDED---------");
-    for (int i = 0; i < propertyCount; i ++) {
-        objc_property_t property = propertys[i];
-        const char *propertyName = property_getName(property);
-        NSLog(@"propertyName: %s", propertyName);
-    }
+    
     NSString *setterString = [self setterMethodNameForPropertyName:fakePropertyName];
     SEL setterMethod = NSSelectorFromString(setterString);
     SEL getterMethod = NSSelectorFromString(fakePropertyName);
