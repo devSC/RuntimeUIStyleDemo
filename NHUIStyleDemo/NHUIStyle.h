@@ -10,6 +10,7 @@
 
 @interface NHUIStyle : NSObject
 
+@property (readonly, nonatomic) UIColor *redColor_f04f4f;
 @property (strong, readonly, nonatomic) UIColor *blueColor_3793fe;
 
 @end

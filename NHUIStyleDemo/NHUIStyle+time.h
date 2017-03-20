@@ -10,6 +10,6 @@
 
 @interface NHUIStyle (time)
 
-@property (readonly, nonatomic) UIColor *redColor_f04f4f;
+//@property (readonly, nonatomic) UIColor *redColor_f04f4f;
 
 @end

@@ -27,6 +27,7 @@
     NSLog(@"\n\nblueColor_3793fe: %@, redColor_f04f4f: %@\n\n",style.blueColor_3793fe ,style.redColor_f04f4f);
     self.view.backgroundColor = style.redColor_f04f4f;
     
+    
 //    [SomeClass dynamicInject];
     
     /*

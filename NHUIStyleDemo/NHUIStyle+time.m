@@ -9,7 +9,7 @@
 #import "NHUIStyle+time.h"
 
 @implementation NHUIStyle (time)
-@dynamic redColor_f04f4f;
+//@dynamic redColor_f04f4f;
 
 
 @end

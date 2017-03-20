@@ -28,9 +28,144 @@ CG_INLINE void swizz_method(Class class, SEL orig_sel, SEL swizzle_sel) {
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self _initial];
+//        [self _initial];
+        [self _replaceGetterMethod];
     }
     return self;
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector {
+    return NO;
+}
+
+- (void)_replaceGetterMethod {
+    
+    //get the propertys list
+    unsigned int propertyCount = 0;
+    objc_property_t *propertys = class_copyPropertyList([self class], &propertyCount);
+    //
+    for (int i = 0; i < propertyCount; i ++) {
+        
+        //get a property
+        objc_property_t property = propertys[i];
+        const char *propertyName = property_getName(property);
+        //get property name
+        NSString *propertyNameString = [NSString stringWithUTF8String:propertyName];
+        //replace getter IMP
+        SEL getterMethod = NSSelectorFromString(propertyNameString);
+        //add setter and getter method
+        if ([self respondsToSelector:getterMethod]) {
+            NSLog(@"gett: %@", propertyNameString);
+        }
+        if (class_addMethod([self class], getterMethod, (IMP)Getter, "@@:")) {
+            NSLog(@"add getter method success: %@", propertyNameString);
+        }
+        Method method = class_getInstanceMethod([self class], getterMethod);
+        IMP imp = method_setImplementation(method, (IMP)Getter);
+//        NSLog(@"%@", imp);
+//        if (class_replaceMethod([self class], getterMethod, (IMP)Getter, "@@:")) {
+//            NSLog(@"replace getter method success: %@", propertyNameString);
+//        }
+    }
+}
+
+id GetterImp(id _self, SEL sel) {
+    //getter value
+    //no value
+    //set value
+    NSString *propertyName = NSStringFromSelector(sel);
+    id value;
+    if ([propertyName.lowercaseString containsString:@"color"]) {
+        //Save the color
+        value = colorWithAttribuateString(propertyName);
+    }
+    //class is UIFont
+    else if ([propertyName.lowercaseString containsString:@"color"]) {
+        //Save the font
+        value = fontWithAttribuateString(propertyName);
+    }
+    
+    [_self setValue:value forKey:propertyName];
+    return value;
+}
+
+UIFont *fontWithAttribuateString(NSString *attribuateString) {
+    
+    NSArray *strings = [attribuateString componentsSeparatedByString:@"_"];
+    NSUInteger fontSize = [strings.lastObject integerValue];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    
+    NSString *defaultName = @"PingFangSC-Regular";
+    NSString *defaultBoldName = @"PingFangSC-Regular";
+    if (strings.count == 2) {
+        font = [UIFont fontWithName:defaultName size:fontSize];
+    }
+    else if (strings.count == 3) { //maybe is the bold font
+        if ([[strings[2] lowercaseString] isEqualToString:@"bold"]) {
+            font = [UIFont fontWithName:defaultBoldName size:fontSize];
+        }
+        else {
+            font = [UIFont fontWithName:defaultName size:fontSize];
+        }
+    }
+    else if (strings.count == 4){
+        //IS Custome Bold
+        NSString *fontFamily = strings[2];
+        NSString *fontStyle = strings[3];
+        NSString *fontName = [NSString stringWithFormat:@"%@-%@", fontFamily, fontStyle];
+        font = [UIFont fontWithName:fontName size:fontSize];
+    }
+    else {
+        NSLog(@"#WARNING-----font not supported : %@", attribuateString);
+    }
+    
+    if (!font) {
+        font = [UIFont systemFontOfSize:fontSize];
+    }
+    
+    return font;
+}
+
+
+UIColor * colorWithAttribuateString(NSString *attribuateString) {
+    NSArray *strings = [attribuateString componentsSeparatedByString:@"_"];
+    UIColor *color;
+    if (strings.count == 2) {
+        color = colorFromHexString(strings.lastObject, 1);
+    }
+    else {
+        NSLog(@"WARNING--------- color attribuate string isn't comply with the name regular: %@", attribuateString);
+        color = [UIColor blackColor];
+    }
+    return color;
+}
+
+UIColor *colorFromHexString(NSString *hexString, CGFloat alpha) {
+    
+    unsigned rgbValue = 0;
+    hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner scanHexInt:&rgbValue];
+    
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+}
+
+
+
+
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    
+    class_addMethod([self class], sel, (IMP)GetterImp, "@@:");
+    return YES;
+    return [super resolveInstanceMethod:sel];
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+    return [super forwardingTargetForSelector:aSelector];
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
+    return [super methodSignatureForSelector:aSelector];
 }
 
 - (void)_initial {
